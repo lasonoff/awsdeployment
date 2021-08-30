@@ -44,5 +44,15 @@ public class User extends BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created")
     private Date created;
+
+    public User(Long id, String login, String password, String firstName, String lastName, Role role, Status status) {
+        setId(id);
+        this.login = login;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+        this.status = status;
+    }
 }
 
