@@ -17,7 +17,7 @@ import java.util.Date;
 @Setter
 @ToString
 @NoArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "events", "password"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "password"})
 public class User extends BaseEntity {
     @Column(name = "login", length = 20)
     @NaturalId
