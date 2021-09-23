@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.yauroff.awsdeployment.model.Project;
 import ru.yauroff.awsdeployment.model.User;
 import ru.yauroff.awsdeployment.repository.ProjectRepository;
+import ru.yauroff.awsdeployment.service.DeploymentService;
 import ru.yauroff.awsdeployment.service.ProjectService;
 
 import java.io.BufferedOutputStream;
@@ -20,6 +21,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private DeploymentService deploymentService;
 
     @Override
     public List<Project> getAll() {
@@ -50,6 +53,10 @@ public class ProjectServiceImpl implements ProjectService {
         stream.write(bytes);
         stream.close();
         // TODO: start deploymentService
+        Thread th = new Thread(() -> {
+            deploymentService.deploy(projEntity);
+        });
+        th.start();
         return projEntity;
     }
 
