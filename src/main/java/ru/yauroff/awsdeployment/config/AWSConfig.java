@@ -7,6 +7,8 @@ import com.amazonaws.services.codebuild.AWSCodeBuild;
 import com.amazonaws.services.codebuild.AWSCodeBuildClientBuilder;
 import com.amazonaws.services.ecr.AmazonECR;
 import com.amazonaws.services.ecr.AmazonECRClientBuilder;
+import com.amazonaws.services.eks.AmazonEKS;
+import com.amazonaws.services.eks.AmazonEKSClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,8 @@ public class AWSConfig {
     private String codebuildRegionName;
     @Value("${aws.ecr.region}")
     private String ecrRegionName;
+    @Value("${aws.eks.region}")
+    private String eksRegionName;
 
     @Bean
     public AmazonS3 s3Client() {
@@ -59,6 +63,7 @@ public class AWSConfig {
 
     @Bean
     public AmazonECR ecrClient() {
+        log.info("EcrRegionName = " + ecrRegionName);
         AmazonECR ecrClient = AmazonECRClientBuilder
                 .standard()
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(
@@ -68,6 +73,20 @@ public class AWSConfig {
                 .withRegion(Regions.fromName(ecrRegionName))
                 .build();
         return ecrClient;
+    }
+
+    @Bean
+    public AmazonEKS eksClient() {
+        log.info("EksRegionName = " + eksRegionName);
+        AmazonEKS eksClient = AmazonEKSClientBuilder
+                .standard()
+                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(
+                        accessKey,
+                        secretKey
+                )))
+                .withRegion(Regions.fromName(eksRegionName))
+                .build();
+        return eksClient;
     }
 
 }
