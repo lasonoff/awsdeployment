@@ -6,11 +6,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.yauroff.awsdeployment.service.CodeBuildAWSService;
+import ru.yauroff.awsdeployment.service.CodeBuildService;
 
+/**
+ * Класс для взаимодействия с AWS CodeBuild сервисом.
+ *
+ * @author Yauroff
+ */
 @Service
 @Slf4j
-public class CodeBuildAWSServiceImpl implements CodeBuildAWSService {
+public class CodeBuildServiceImpl implements CodeBuildService {
     @Value("${aws.codebuild.region}")
     private String regionName;
     @Value("${aws.accountid}")
@@ -78,6 +83,4 @@ public class CodeBuildAWSServiceImpl implements CodeBuildAWSService {
         log.info(buildSpec);
         return buildSpec;
     }
-
-
 }

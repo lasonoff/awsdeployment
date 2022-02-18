@@ -1,14 +1,13 @@
 package ru.yauroff.awsdeployment.service.impl;
 
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yauroff.awsdeployment.model.Project;
-import ru.yauroff.awsdeployment.service.CodeBuildAWSService;
+import ru.yauroff.awsdeployment.service.CodeBuildService;
 import ru.yauroff.awsdeployment.service.DeploymentService;
-import ru.yauroff.awsdeployment.service.ECRAWSService;
-import ru.yauroff.awsdeployment.service.S3AWSService;
+import ru.yauroff.awsdeployment.service.ECRService;
+import ru.yauroff.awsdeployment.service.S3Service;
 
 import java.io.IOException;
 
@@ -16,11 +15,11 @@ import java.io.IOException;
 @Slf4j
 public class DeploymentServiceImpl implements DeploymentService {
     @Autowired
-    private S3AWSService s3AWSService;
+    private S3Service s3AWSService;
     @Autowired
-    private CodeBuildAWSService codeBuildAWSService;
+    private CodeBuildService codeBuildAWSService;
     @Autowired
-    private ECRAWSService ecrawsService;
+    private ECRService ecrService;
 
     @Override
     public void deploy(Project project) {
@@ -31,7 +30,7 @@ public class DeploymentServiceImpl implements DeploymentService {
             log.error(e.getMessage());
             return;
         }
-        ecrawsService.createPrivateRepository(project.getName());
+        ecrService.createPrivateRepository(project.getName());
         codeBuildAWSService.buildDockerImage(s3Path, project.getName());
     }
 }

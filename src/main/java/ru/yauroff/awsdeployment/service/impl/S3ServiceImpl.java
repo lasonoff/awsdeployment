@@ -5,19 +5,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.yauroff.awsdeployment.service.S3AWSService;
+import ru.yauroff.awsdeployment.service.S3Service;
 
 import java.io.File;
 import java.io.IOException;
 
 @Service
 @Slf4j
-public class S3AWSServiceImpl implements S3AWSService {
+/**
+ * Класс для взаимодействия с AWS S3 сервисом.
+ *
+ * @author Yauroff
+ */
+public class S3ServiceImpl implements S3Service {
 
     private final String DELIMITER = "/";
-
-    @Autowired
-    private AmazonS3 amazonS3;
 
     @Value("${aws.s3.bucket}")
     private String bucketName;
@@ -25,6 +27,8 @@ public class S3AWSServiceImpl implements S3AWSService {
     @Value("${aws.s3.dirName}")
     private String projectDirName;
 
+    @Autowired
+    private AmazonS3 amazonS3;
 
     @Override
     public String putZipObject(String zipFileLocation, String zipFileName) throws IOException {

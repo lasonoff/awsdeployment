@@ -18,6 +18,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Slf4j
 @Configuration
+/**
+ * Класс с конфигурациями для клиентов AWS.
+ */
 public class AWSConfig {
     @Value("${aws.accesskey}")
     private String accessKey;

@@ -5,13 +5,11 @@ import lombok.Data;
 import ru.yauroff.awsdeployment.model.Project;
 import ru.yauroff.awsdeployment.model.ProjectStatus;
 
-import javax.persistence.Column;
-
 @Data
 @AllArgsConstructor
 public class ProjectResponseDTO {
 
-    private Long  id;
+    private Long id;
     private String name;
     private String description;
     private ProjectStatus status;

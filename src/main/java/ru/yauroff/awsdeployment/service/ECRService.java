@@ -1,5 +1,5 @@
 package ru.yauroff.awsdeployment.service;
 
-public interface ECRAWSService {
+public interface ECRService {
     void createPrivateRepository(String repositoryName);
 }
