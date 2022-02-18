@@ -38,6 +38,7 @@ dependencies {
     implementation "io.jsonwebtoken:jjwt:$jjwtVersion"
     implementation "com.amazonaws:aws-java-sdk:$awsJavaSdkVersion"
     implementation "jakarta.xml.bind:jakarta.xml.bind-api:$xmlBindApiVersion"
+    implementation "io.fabric8:kubernetes-client:$k8sClientVersion"
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'mysql:mysql-connector-java'
