@@ -8,5 +8,5 @@ package ru.yauroff.awsdeployment.service;
  */
 public interface CodeBuildService {
 
-    void buildDockerImage(String s3path, String projectName);
+    String buildDockerImage(String s3path, String projectName);
 }

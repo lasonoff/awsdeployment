@@ -18,21 +18,22 @@ import ru.yauroff.awsdeployment.service.CodeBuildService;
 public class CodeBuildServiceImpl implements CodeBuildService {
     @Value("${aws.codebuild.region}")
     private String regionName;
-    @Value("${aws.accountid}")
+    @Value("${aws.account.id}")
     private String accountId;
 
     @Autowired
     private AWSCodeBuild awsCodeBuild;
 
     @Override
-    public void buildDockerImage(String s3path, String projectName) {
+    public String buildDockerImage(String s3path, String projectName) {
+        String tagImage = accountId + ".dkr.ecr." + regionName + ".amazonaws.com/" + projectName + ":latest";
         CreateProjectRequest createProjectRequest = new CreateProjectRequest()
                 .withName(projectName)
                 .withDescription("Project for deploy with name " + projectName)
                 .withSource(new ProjectSource()
                         .withType(SourceType.S3)
                         .withLocation(s3path)
-                        .withBuildspec(createBuildSpec(projectName)))
+                        .withBuildspec(createBuildSpec(projectName, tagImage)))
                 .withEnvironment(new ProjectEnvironment()
                         .withType("LINUX_CONTAINER")
                         .withImage("aws/codebuild/amazonlinux2-x86_64-standard:3.0")
@@ -50,10 +51,10 @@ public class CodeBuildServiceImpl implements CodeBuildService {
                                                     .getName()));
         startBuildResult.getBuild()
                         .getBuildStatus();
+        return tagImage;
     }
 
-    private String createBuildSpec(String projectName) {
-        String tagImage = accountId + ".dkr.ecr." + regionName + ".amazonaws.com/" + projectName + ":latest";
+    private String createBuildSpec(String projectName, String tagImage) {
         log.info("Tag docker image " + tagImage);
         String buildSpec = "version: 0.2\n" +
                 "\n" +

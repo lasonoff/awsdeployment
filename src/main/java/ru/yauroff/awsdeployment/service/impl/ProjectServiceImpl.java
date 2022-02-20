@@ -26,17 +26,17 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<Project> getAll() {
-        return null;
+        return projectRepository.findAll();
     }
 
     @Override
     public Project getById(Long id) {
-        return null;
+        return projectRepository.getById(id);
     }
 
     @Override
     public long getCount() {
-        return 0;
+        return projectRepository.count();
     }
 
     @Override

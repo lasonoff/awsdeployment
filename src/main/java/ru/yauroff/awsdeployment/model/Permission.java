@@ -2,9 +2,11 @@ package ru.yauroff.awsdeployment.model;
 
 public enum Permission {
     USER_READ("users:read"),
-    USER_WRITE("users:write");
+    USER_WRITE("users:write"),
+    PROJECT_READ("projects:read"),
+    PROJECT_WRITE("projects:write");
 
-    private String permission;
+    private final String permission;
 
     Permission(String permission) {
         this.permission = permission;

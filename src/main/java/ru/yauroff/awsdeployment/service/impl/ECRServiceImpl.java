@@ -15,8 +15,11 @@ public class ECRServiceImpl implements ECRService {
     private AmazonECR amazonECR;
 
     @Override
-    public void createPrivateRepository(String repositoryName) {
+    public String createPrivateRepository(String repositoryName) {
         CreateRepositoryResult createRepositoryResult = amazonECR.createRepository(new CreateRepositoryRequest()
                 .withRepositoryName(repositoryName));
+        String repositoryURI = createRepositoryResult.getRepository()
+                                                     .getRepositoryUri();
+        return repositoryURI;
     }
 }
