@@ -15,6 +15,7 @@ import ru.yauroff.awsdeployment.dto.AuthenticationRequestDTO;
 import ru.yauroff.awsdeployment.model.User;
 import ru.yauroff.awsdeployment.repository.UserRepository;
 import ru.yauroff.awsdeployment.security.JwtTokenProvider;
+import ru.yauroff.awsdeployment.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,21 +27,23 @@ import java.util.Map;
 public class AuthenticationRestControllerV1 {
 
     private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthenticationRestControllerV1(AuthenticationManager authenticationManager, UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
+    public AuthenticationRestControllerV1(AuthenticationManager authenticationManager, UserService userService, JwtTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequestDTO request) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getLogin(), request.getPassword()));
-            User user = userRepository.findByLogin(request.getLogin())
-                                      .orElseThrow(() -> new UsernameNotFoundException("User doesn't exists!"));
+            User user = userService.findByLoginOrEmail(request.getIdentifier());
+            if (user == null) {
+                throw new UsernameNotFoundException("User doesn't exists!");
+            }
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), request.getPassword()));
             String token = jwtTokenProvider.createToken(user.getLogin(), user.getRole()
                                                                              .name());
             Map<Object, Object> response = new HashMap<>();
@@ -49,7 +52,7 @@ public class AuthenticationRestControllerV1 {
 
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
-            return new ResponseEntity<>("Invalid user name or password", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Invalid identifier or password", HttpStatus.FORBIDDEN);
         }
     }
 

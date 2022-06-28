@@ -3,7 +3,6 @@ package ru.yauroff.awsdeployment.service.impl;
 import com.amazonaws.services.codebuild.AWSCodeBuild;
 import com.amazonaws.services.codebuild.model.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.yauroff.awsdeployment.service.CodeBuildService;
@@ -16,13 +15,15 @@ import ru.yauroff.awsdeployment.service.CodeBuildService;
 @Service
 @Slf4j
 public class CodeBuildServiceImpl implements CodeBuildService {
+    private final AWSCodeBuild awsCodeBuild;
     @Value("${aws.codebuild.region}")
     private String regionName;
     @Value("${aws.account.id}")
     private String accountId;
 
-    @Autowired
-    private AWSCodeBuild awsCodeBuild;
+    public CodeBuildServiceImpl(AWSCodeBuild awsCodeBuild) {
+        this.awsCodeBuild = awsCodeBuild;
+    }
 
     @Override
     public String buildDockerImage(String s3path, String projectName) {

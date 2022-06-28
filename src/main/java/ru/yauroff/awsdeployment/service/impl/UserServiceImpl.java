@@ -1,6 +1,5 @@
 package ru.yauroff.awsdeployment.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yauroff.awsdeployment.model.User;
 import ru.yauroff.awsdeployment.repository.UserRepository;
@@ -11,8 +10,11 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public List<User> getAll() {
@@ -27,6 +29,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByLogin(String login) {
         return userRepository.findByLogin(login)
+                             .orElse(null);
+    }
+
+    @Override
+    public User findByLoginOrEmail(String identifier) {
+        return userRepository.findByLoginOrEmail(identifier, identifier)
                              .orElse(null);
     }
 

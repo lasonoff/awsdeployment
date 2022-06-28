@@ -1,6 +1,5 @@
 package ru.yauroff.awsdeployment.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.yauroff.awsdeployment.model.Project;
@@ -18,11 +17,14 @@ import java.util.List;
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
-    @Autowired
-    private ProjectRepository projectRepository;
+    private final ProjectRepository projectRepository;
 
-    @Autowired
-    private DeploymentService deploymentService;
+    private final DeploymentService deploymentService;
+
+    public ProjectServiceImpl(ProjectRepository projectRepository, DeploymentService deploymentService) {
+        this.projectRepository = projectRepository;
+        this.deploymentService = deploymentService;
+    }
 
     @Override
     public List<Project> getAll() {

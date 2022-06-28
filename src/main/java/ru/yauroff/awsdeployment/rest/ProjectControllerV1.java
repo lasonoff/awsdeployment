@@ -67,7 +67,7 @@ public class ProjectControllerV1 {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('projects:read')")
-    public ResponseEntity<ProjectResponseDTO> getFile(@PathVariable("id") Long projectId) {
+    public ResponseEntity<ProjectResponseDTO> getProject(@PathVariable("id") Long projectId) {
         if (projectId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

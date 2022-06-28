@@ -9,13 +9,11 @@ import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.yauroff.awsdeployment.model.Project;
 import ru.yauroff.awsdeployment.model.ProjectStatus;
 import ru.yauroff.awsdeployment.service.K8sService;
-import ru.yauroff.awsdeployment.service.ProjectService;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
@@ -23,20 +21,19 @@ import java.util.List;
 @Slf4j
 @Service
 public class K8sServiceImpl implements K8sService {
+    private final AmazonEKS amazonEKS;
     @Value("${k8s.eks.clusterName}")
     private String clusterName;
-
     @Value("${aws.eks.region}")
     private String eksRegionName;
-
     @Value("${aws.account.id}")
     private String accountId;
-
     @Value("${k8s.author}")
     private String author;
 
-    @Autowired
-    private AmazonEKS amazonEKS;
+    public K8sServiceImpl(AmazonEKS amazonEKS) {
+        this.amazonEKS = amazonEKS;
+    }
 
     @Override
     public Project createServiceWithDeployment(Project project, String tagImage) {
