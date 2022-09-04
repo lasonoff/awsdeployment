@@ -1,4 +1,4 @@
-package ru.yauroff.awsdeployment.security;
+package ru.yauroff.awsdeployment.security.jwt;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

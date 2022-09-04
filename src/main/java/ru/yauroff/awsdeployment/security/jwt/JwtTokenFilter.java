@@ -1,4 +1,4 @@
-package ru.yauroff.awsdeployment.security;
+package ru.yauroff.awsdeployment.security.jwt;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

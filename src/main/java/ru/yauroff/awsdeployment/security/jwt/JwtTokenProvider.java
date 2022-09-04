@@ -1,4 +1,4 @@
-package ru.yauroff.awsdeployment.security;
+package ru.yauroff.awsdeployment.security.jwt;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Qualifier;

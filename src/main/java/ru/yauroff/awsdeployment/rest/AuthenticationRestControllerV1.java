@@ -2,19 +2,16 @@ package ru.yauroff.awsdeployment.rest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.yauroff.awsdeployment.dto.AuthenticationRequestDTO;
 import ru.yauroff.awsdeployment.model.User;
-import ru.yauroff.awsdeployment.repository.UserRepository;
-import ru.yauroff.awsdeployment.security.JwtTokenProvider;
+import ru.yauroff.awsdeployment.security.jwt.JwtTokenProvider;
 import ru.yauroff.awsdeployment.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +34,7 @@ public class AuthenticationRestControllerV1 {
     }
 
     @PostMapping("/login")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequestDTO request) {
         try {
             User user = userService.findByLoginOrEmail(request.getIdentifier());
@@ -57,6 +55,7 @@ public class AuthenticationRestControllerV1 {
     }
 
     @PostMapping("/logout")
+    @PreAuthorize("permitAll()")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(request, response, null);
