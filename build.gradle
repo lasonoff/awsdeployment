@@ -1,7 +1,8 @@
 plugins {
-    id 'org.springframework.boot' version '2.5.4'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'org.springframework.boot' version "2.5.2"
+    id 'io.spring.dependency-management' version "1.0.11.RELEASE"
+    id "org.flywaydb.flyway" version "7.7.3"
 }
 
 group = 'ru.yauroff'
@@ -16,12 +17,29 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://repo1.maven.org/maven2/"
+    }
 }
+
+flyway {
+    url = System.getenv('JDBC_DATABASE_URL')
+    user = System.getenv('JDBC_DATABASE_USER')
+    password = System.getenv('JDBC_DATABASE_PASSWORD')
+    locations = ['classpath:db/migration']
+}
+
+flywayMigrate.dependsOn classes
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.6.0'
+    implementation "io.jsonwebtoken:jjwt:$jjwtVersion"
+    implementation "com.amazonaws:aws-java-sdk:$awsJavaSdkVersion"
+    implementation "jakarta.xml.bind:jakarta.xml.bind-api:$xmlBindApiVersion"
+    implementation "io.fabric8:kubernetes-client:$k8sClientVersion"
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'mysql:mysql-connector-java'
